@@ -78,6 +78,45 @@ The SwitchBot system consists of the following components:
 2. Open the SwitchBot application and connect to the ESP32 device.
 3. Use the application to control the servo motor and press the switch.
 
+### Device configuration diagram
+
+Below is the device configuration diagram for the ESP32, servo motor, and power connections:
+
+```
++-------------------+
+|      ESP32        |
+|                   |
+|  GPIO 15 (PWM) <--|--- Signal pin (Servo Motor)
+|  3.3V       <--|--- Power pin (Servo Motor)
+|  GND        <--|--- Ground pin (Servo Motor)
+|                   |
+|  VIN        <--|--- Positive terminal (Battery Box)
+|  GND        <--|--- Negative terminal (Battery Box)
+|                   |
+|  GPIO 14 (Wake) <--|--- External button
++-------------------+
+```
+
+* **ESP32 Microcontroller**:
+  * GPIO 15: Connect to the signal pin of the servo motor.
+  * 3.3V: Connect to the power pin of the servo motor.
+  * GND: Connect to the ground pin of the servo motor.
+  * VIN: Connect to the positive terminal of the battery box.
+  * GND: Connect to the negative terminal of the battery box.
+  * GPIO 14: Connect to an external button for waking up the ESP32 from DeepSleep mode.
+
+* **Servo Motor**:
+  * Signal pin: Connect to GPIO 15 of the ESP32.
+  * Power pin: Connect to 3.3V of the ESP32.
+  * Ground pin: Connect to GND of the ESP32.
+
+* **Battery Box**:
+  * Positive terminal: Connect to VIN of the ESP32.
+  * Negative terminal: Connect to GND of the ESP32.
+
+* **External Button**:
+  * Connect to GPIO 14 of the ESP32 for waking up from DeepSleep mode.
+
 ## Power Management
 
 The ESP32 is configured to use DeepSleep mode to reduce power consumption. The device will wake up from DeepSleep mode when the external button is pressed. After executing the servo motor command, the ESP32 will return to DeepSleep mode after 10 seconds.
