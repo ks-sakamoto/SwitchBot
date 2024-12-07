@@ -35,7 +35,7 @@ class DeepSleep:
 
 
 def main() -> None:
-    sleep_controller = DeepSleep(14)
+    sleep_controller = DeepSleep(4)
 
     # # リセット要因を確認
     # wake_reason = sleep_controller.get_wake_reason()

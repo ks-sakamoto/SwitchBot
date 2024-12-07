@@ -55,18 +55,17 @@ class Servo:
 
 def main():
     # GPIO15番ピンにサーボモータを接続
-    servo = Servo(15)
+    servo = Servo(23)
 
-    try:
-        while True:
-            time.sleep(1)
-            print("start servo")
-            servo.set_angle(90)
-            servo.set_default_angle()
+    # 3回動作させた後ストップする
+    for _ in range(3):
+        time.sleep(1)
+        print("start servo")
+        servo.set_angle(90)
+        servo.set_default_angle()
 
-    except KeyboardInterrupt:
-        servo.stop()
-        print("stop servo")
+    servo.stop()
+    print("stop servo")
 
 
 if __name__ == "__main__":
