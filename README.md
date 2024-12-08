@@ -7,6 +7,7 @@ This project is a SwitchBot system that allows you to control a physical switch 
 - [Requirements](#requirements)
 - [System Overview](#system-overview)
 - [ESP32 Setup](#esp32-setup)
+- [ESP32 Pinout Reference](#esp32-pinout-reference)
 - [iPhone Application](#iphone-application)
 - [Device Configuration](#device-configuration)
 
@@ -47,6 +48,36 @@ The SwitchBot system consists of the following components:
 1. Install MicroPython on the ESP32. Follow the instructions [here](https://docs.micropython.org/en/latest/esp32/tutorial/intro.html) to flash MicroPython firmware on the ESP32.
 
 2. Upload the `main.py` file to the ESP32. The `main.py` file contains the code to handle BLE communication, control the servo motor, and manage DeepSleep mode.
+
+### USB Driver Installation
+
+If your computer does not recognize the ESP32 when connected via USB, you may need to install the USB driver. Follow the instructions provided in the link below to install the USB driver for ESP32:
+
+[Install ESP32 USB Drivers (CP210x) on Windows](https://randomnerdtutorials.com/install-esp32-esp8266-usb-drivers-cp210x-windows/)
+
+### Transferring MicroPython Scripts to ESP32
+
+To transfer MicroPython scripts to the ESP32, you can use the `ampy` tool. Follow the steps below to install `ampy` and transfer the `main.py` file to the ESP32.
+
+#### Installing `ampy`
+
+1. Install `ampy` using `pip`:
+   ```
+   pip install adafruit-ampy
+   ```
+
+#### Transferring `main.py` to ESP32
+
+1. Connect the ESP32 to your computer via USB.
+2. Use the following command to transfer the `main.py` file to the ESP32:
+   ```
+   ampy --port /dev/ttyUSB0 put main.py
+   ```
+   Replace `/dev/ttyUSB0` with the appropriate serial port for your system.
+
+## ESP32 Pinout Reference
+
+For a complete guide to the ESP32 pinout, refer to this [link](https://ciksiti.com/ja/chapters/13091-esp32-pinout-reference--a-complete-guide).
 
 ## iPhone Application
 
