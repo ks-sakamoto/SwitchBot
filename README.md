@@ -7,6 +7,7 @@ This project is a SwitchBot system that allows you to control a physical switch 
 - [Requirements](#requirements)
 - [System Overview](#system-overview)
 - [ESP32 Setup](#esp32-setup)
+- [ESP32 Pinout Reference](#esp32-pinout-reference)
 - [iPhone Application](#iphone-application)
 - [Device Configuration](#device-configuration)
 
@@ -73,6 +74,10 @@ To transfer MicroPython scripts to the ESP32, you can use the `ampy` tool. Follo
    ampy --port /dev/ttyUSB0 put main.py
    ```
    Replace `/dev/ttyUSB0` with the appropriate serial port for your system.
+
+## ESP32 Pinout Reference
+
+For a complete guide to the ESP32 pinout, refer to this [link](https://ciksiti.com/ja/chapters/13091-esp32-pinout-reference--a-complete-guide).
 
 ## iPhone Application
 
