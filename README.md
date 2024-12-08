@@ -54,6 +54,26 @@ If your computer does not recognize the ESP32 when connected via USB, you may ne
 
 [Install ESP32 USB Drivers (CP210x) on Windows](https://randomnerdtutorials.com/install-esp32-esp8266-usb-drivers-cp210x-windows/)
 
+### Transferring MicroPython Scripts to ESP32
+
+To transfer MicroPython scripts to the ESP32, you can use the `ampy` tool. Follow the steps below to install `ampy` and transfer the `main.py` file to the ESP32.
+
+#### Installing `ampy`
+
+1. Install `ampy` using `pip`:
+   ```
+   pip install adafruit-ampy
+   ```
+
+#### Transferring `main.py` to ESP32
+
+1. Connect the ESP32 to your computer via USB.
+2. Use the following command to transfer the `main.py` file to the ESP32:
+   ```
+   ampy --port /dev/ttyUSB0 put main.py
+   ```
+   Replace `/dev/ttyUSB0` with the appropriate serial port for your system.
+
 ## iPhone Application
 
 ### Building the Application
