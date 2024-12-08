@@ -48,6 +48,12 @@ The SwitchBot system consists of the following components:
 
 2. Upload the `main.py` file to the ESP32. The `main.py` file contains the code to handle BLE communication, control the servo motor, and manage DeepSleep mode.
 
+### USB Driver Installation
+
+If your computer does not recognize the ESP32 when connected via USB, you may need to install the USB driver. Follow the instructions provided in the link below to install the USB driver for ESP32:
+
+[Install ESP32 USB Drivers (CP210x) on Windows](https://randomnerdtutorials.com/install-esp32-esp8266-usb-drivers-cp210x-windows/)
+
 ## iPhone Application
 
 ### Building the Application
