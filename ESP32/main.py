@@ -1,19 +1,24 @@
-import machine
 import time
+
 import bluetooth
-from machine import Pin, PWM, Timer
+import config
+import machine
+from machine import PWM, Pin, Timer
 
 # Initialize the servo motor
 servo = PWM(Pin(15), freq=50)
+
 
 # Function to set the servo angle
 def set_servo_angle(angle):
     duty = int((angle / 180) * 1023)
     servo.duty(duty)
 
+
 # BLE setup
 ble = bluetooth.BLE()
 ble.active(True)
+
 
 # Function to handle BLE events
 def ble_irq(event, data):
@@ -29,11 +34,12 @@ def ble_irq(event, data):
         time.sleep(10)
         machine.deepsleep()
 
+
 # Register the BLE event handler
 ble.irq(ble_irq)
 
 # Create a BLE service
-service_uuid = bluetooth.UUID("12345678-1234-5678-1234-56789abcdef0")
+service_uuid = bluetooth.UUID(config.SERVICE_UUID)
 service = (service_uuid, ())
 
 # Add the service to the BLE stack
