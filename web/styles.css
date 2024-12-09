@@ -1,0 +1,63 @@
+/* ページ全体のレイアウトを中央揃えに設定　*/
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+}
+
+/* メインコンテンツを含むコンテナのスタイル設定 */
+#container {
+    /* 背景色 */
+    background-color: white;
+    /* 内側の余白 */
+    padding: 2rem;
+    /* 角を丸く */
+    border-radius: 8px;
+    /* 影効果 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* テキストを中央揃え */
+    text-align: center;
+}
+
+/* 見出しのスタイル */
+h1 {
+    color: #1a73e8;
+    /* 下部の余白 */
+    margin-bottom: 1.5rem;
+}
+
+/* ボタンの基本スタイル */
+button {
+    /* 背景色 */
+    background-color: #1a73e8;
+    /* テキストカラー */
+    color: white;
+    /* 枠線なし */
+    border: none;
+    /* 内側の余白 */
+    padding: 0.5rem 1rem;
+    /* 外側の余白 */
+    margin: 0.5rem;
+    /* 角を丸く */
+    border-radius: 4px;
+    /* カーソルをポインターに */
+    cursor: pointer;
+    /* フォントサイズ */
+    font-size: 1rem;
+}
+
+/* ボタンホバー時のスタイル */
+button:hover {
+    background-color: #1557b0;
+}
+
+/* 接続状態表示のスタイル */
+#connectionStatus {
+    color: #5f6368;
+    /* 下部の余白 */
+    margin-bottom: 1rem;
+}
