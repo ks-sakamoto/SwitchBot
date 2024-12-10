@@ -50,7 +50,7 @@ def main() -> None:
     #     print("First time boot")
 
     # DeepSleepモードを開始
-    sleep_controller.start_deepsleep()
+    sleep_controller.start_deepsleep(10000)
 
 
 if __name__ == "__main__":
