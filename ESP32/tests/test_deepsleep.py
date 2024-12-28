@@ -2,8 +2,6 @@
 DeepSleepへの移行とDeepSleepからの復帰をテスト
 """
 
-import time
-
 import machine
 from machine import Pin
 
@@ -24,7 +22,7 @@ class DeepSleep:
 
 
 def main() -> None:
-    sleep_controller = DeepSleep(4)
+    sleep_controller = DeepSleep(27)
 
     # DeepSleepモードを開始
     sleep_controller.start_deepsleep(10000)

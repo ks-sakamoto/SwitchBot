@@ -10,6 +10,7 @@ import time
 
 import bluetooth
 import config
+import test_deepsleep
 import test_servo
 from machine import Pin
 from micropython import const
@@ -25,19 +26,32 @@ _FLAG_WRITE_NO_RESPONSE = const(0x0004)  # 応答なし書き込み可能
 _FLAG_WRITE = const(0x0008)  # 書き込み可能
 
 
+# ディスクリプタUUIDの定義
+# _USER_DESCRIPTION_UUID = bluetooth.UUID(0x2901)
+
 # サービスUUIDの定義
 _SERVICE_UUID = bluetooth.UUID(config.SERVICE_UUID)
 _SERVO_CONTROL = (  # サーボモータ動作用のキャラクタリスティック
-    bluetooth.UUID(config.CHAR_UUID),
+    bluetooth.UUID(config.SERVO_CHAR_UUID),
     _FLAG_WRITE | _FLAG_WRITE_NO_RESPONSE,
+    # ディスクリプタを追加
+    # ((_USER_DESCRIPTION_UUID, bytes("Servo Control", "utf-8")),),
 )
 _LED_CONTROL = (  # Lチカ用のキャラクタリスティック
-    bluetooth.UUID("6E400003-B5A3-F393-E0A9-E50E24DCCA9E"),
+    bluetooth.UUID(config.LED_CHAR_UUID),
     _FLAG_WRITE | _FLAG_WRITE_NO_RESPONSE,
+    # ディスクリプタを追加
+    # ((_USER_DESCRIPTION_UUID, bytes("LED Control", "utf-8")),),
+)
+_DEEPSLEE_CONTROL = (  # Deepsleep用のキャラクタリスティック
+    bluetooth.UUID(config.DEEPSLEEP_CHAR_UUID),
+    _FLAG_WRITE | _FLAG_WRITE_NO_RESPONSE,
+    # ディスクリプタを追加
+    # ((_USER_DESCRIPTION_UUID, bytes("Deepsleep Control", "utf-8")),),
 )
 _SERVICE = (  # GATTサーバに登録するためのサービス
     _SERVICE_UUID,
-    (_SERVO_CONTROL, _LED_CONTROL),
+    (_SERVO_CONTROL, _LED_CONTROL, _DEEPSLEE_CONTROL),
 )
 
 # アドバタイジングデータタイプの定義
@@ -74,7 +88,7 @@ class BLEPeripheral:
         self._ble.active(True)  # BLEを有効化
         self._ble.irq(self._irq)  # イベントハンドラを設定
         # GATTサーバにサービスを登録
-        ((self._handle_servo, self._handle_led),) = (
+        ((self._handle_servo, self._handle_led, self._handle_deepsleep),) = (
             self._ble.gatts_register_services((_SERVICE,))
         )
         self._connections = set()  # 接続中のデバイスを管理
@@ -91,6 +105,8 @@ class BLEPeripheral:
         # LEDの点滅回数を管理
         self._blink_count = 0
         self._MAX_BLINKS = 5
+
+        self._led.on()
 
     def _irq(self, event, data):
         """
@@ -124,18 +140,24 @@ class BLEPeripheral:
             # # 書き込まれたデータを読み取る
             # value = self._ble.gatts_read(value_handle)
 
-            # 受信したデータがSERVOキャラクタリスティックの場合
+            # 受信データがSERVOキャラクタリスティックの場合
             if value_handle == self._handle_servo:
                 # test_servo.main()を呼び出す
                 print("Start servo")
                 test_servo.main()
 
-            # 受信したデータがLEDキャラクタリスティックの場合
+            # 受信データがLEDキャラクタリスティックの場合
             elif value_handle == self._handle_led:
                 # Lチカを実行
                 print("Start LED")
                 self._led_active = True
                 self._blink_count = 0
+
+            # 受信データがDeepsleepキャラクタリスティックの場合
+            elif value_handle == self._handle_deepsleep:
+                # deepsleepを実行
+                print("Start deepsleep")
+                test_deepsleep.main()
 
     def process(self):
         """
@@ -166,6 +188,7 @@ class BLEPeripheral:
         self._ble.gap_advertise(interval_us, adv_data=self._payload)
 
     def _advertising_payload(
+        self,
         limited_disc=False,
         br_edr=False,
         name=None,
@@ -207,7 +230,7 @@ class BLEPeripheral:
 
         # デバイス名の設定
         if name:
-            _append(_ADV_TYPE_NAME, name)
+            _append(_ADV_TYPE_NAME, name.encode())
 
         # サービスUUIDの設定
         if services:

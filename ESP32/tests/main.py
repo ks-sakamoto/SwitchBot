@@ -6,11 +6,7 @@
 """
 
 import test_bluetooth
-import test_deepsleep
 
 if __name__ == "__main__":
     # BLE起動
     test_bluetooth.main()
-
-    # deepsleep開始
-    test_deepsleep.main()

@@ -30,8 +30,8 @@ class Servo:
 
         Parameters
         ----------
-        # angle : fload
-        #     サーボモータを動作させる角度
+        angle : fload
+            サーボモータを動作させる角度
         duty : int
             サーボモータを動作させるデューティー比（本来はangleにしたい）
         """
@@ -57,13 +57,13 @@ class Servo:
 
 def main():
     # GPIO15番ピンにサーボモータを接続
-    servo = Servo(23)
+    servo = Servo(26)
 
     # 3回動作させた後ストップする
     for _ in range(3):
         time.sleep(1)
         print("start servo")
-        servo.set_angle(113)
+        servo.set_angle(119)
         servo.set_default_angle()
 
     servo.stop()
