@@ -34,8 +34,8 @@ The SwitchBot system consists of the following components:
 ### Hardware Connections
 
 1. Connect the servo motor to the ESP32:
-   - Signal pin to GPIO 15
-   - Power pin to 3.3V
+   - Signal pin to GPIO 26
+   - Power pin to VIN
    - Ground pin to GND
 
 2. Connect the 9V battery to the 3-terminal regulator:
@@ -46,7 +46,7 @@ The SwitchBot system consists of the following components:
    - Output pin of the 3-terminal regulator to VIN
    - Ground pin of the 3-terminal regulator to GND
 
-4. Connect an external button to GPIO 14 for waking up the ESP32 from DeepSleep mode.
+4. Connect an external button to GPIO 27 for waking up the ESP32 from DeepSleep mode.
 
 ### MicroPython Firmware
 
@@ -109,14 +109,14 @@ Below is the device configuration diagram for the ESP32, servo motor, and power 
 +-------------------+
 |      ESP32        |
 |                   |
-|  GPIO 15 (PWM) <--|--- Signal pin (Servo Motor)
-|  3.3V       <--|--- Power pin (Servo Motor)
+|  GPIO 26 (PWM) <--|--- Signal pin (Servo Motor)
+|  VIN        <--|--- Power pin (Servo Motor)
 |  GND        <--|--- Ground pin (Servo Motor)
 |                   |
 |  VIN        <--|--- Output pin (3-terminal regulator)
 |  GND        <--|--- Ground pin (3-terminal regulator)
 |                   |
-|  GPIO 14 (Wake) <--|--- External button
+|  GPIO 27 (Wake) <--|--- External button
 +-------------------+
        |
        |
@@ -130,16 +130,16 @@ Below is the device configuration diagram for the ESP32, servo motor, and power 
 ```
 
 * **ESP32 Microcontroller**:
-  * GPIO 15: Connect to the signal pin of the servo motor.
-  * 3.3V: Connect to the power pin of the servo motor.
+  * GPIO 26: Connect to the signal pin of the servo motor.
+  * VIN: Connect to the power pin of the servo motor.
   * GND: Connect to the ground pin of the servo motor.
   * VIN: Connect to the output pin of the 3-terminal regulator.
   * GND: Connect to the ground pin of the 3-terminal regulator.
-  * GPIO 14: Connect to an external button for waking up the ESP32 from DeepSleep mode.
+  * GPIO 27: Connect to an external button for waking up the ESP32 from DeepSleep mode.
 
 * **Servo Motor**:
-  * Signal pin: Connect to GPIO 15 of the ESP32.
-  * Power pin: Connect to 3.3V of the ESP32.
+  * Signal pin: Connect to GPIO 26 of the ESP32.
+  * Power pin: Connect to VIN of the ESP32.
   * Ground pin: Connect to GND of the ESP32.
 
 * **3-terminal regulator**:
@@ -153,7 +153,7 @@ Below is the device configuration diagram for the ESP32, servo motor, and power 
   * Ground terminal: Connect to the ground pin of the 3-terminal regulator.
 
 * **External Button**:
-  * Connect to GPIO 14 of the ESP32 for waking up from DeepSleep mode.
+  * Connect to GPIO 27 of the ESP32 for waking up from DeepSleep mode.
 
 ## Power Management
 
@@ -163,4 +163,4 @@ The ESP32 is configured to use DeepSleep mode to reduce power consumption. The d
 
 - If the ESP32 does not respond to commands from the BLE app, ensure that the BLE connection is established and the device is powered on.
 - If the servo motor does not move, check the connections and ensure that the servo motor is receiving power.
-- If the ESP32 does not wake up from DeepSleep mode, check the connection of the external button and ensure that it is connected to GPIO 14.
+- If the ESP32 does not wake up from DeepSleep mode, check the connection of the external button and ensure that it is connected to GPIO 27.
