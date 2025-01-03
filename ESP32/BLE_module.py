@@ -70,7 +70,19 @@ _ADV_MAX_PYLOAD = const(31)
 
 class BLEPeripheral:
     """
-    copilotに後で考えてもらう
+    BLEPeripheralクラスは、ESP32のBLE機能を使用してペリフェラル（周辺機器）として動作させるためのクラスです。
+    主に以下の機能を提供します:
+    1. BLEの初期化とアドバタイジング:
+        - BLEオブジェクトをアクティブにし、サービスおよびキャラクタリスティックを登録し、アドバタイジングを開始します。
+        - デバイス名やUUIDなど、アドバタイジングペイロードの設定が可能です。
+    2. 接続管理:
+        - BLEの接続イベントを受け取り、接続・切断されたデバイスを管理します。
+    3. キャラクタリスティックへの書き込みイベント処理:
+        - サーボモータ駆動、DeepSleep遷移、LED点滅など、各キャラクタリスティックに書き込まれたデータをトリガーとして実行します。
+    4. LED点滅処理:
+        - メインループ内でLEDの点滅状態を管理し、所定回数の点滅後に停止します。
+    このクラスを利用することで、ESP32をBLEペリフェラルとして動作させ、
+    外部機器からの操作や制御を柔軟に行うことができます。
     """
 
     def __init__(self, ble, name="esp32"):
@@ -117,44 +129,53 @@ class BLEPeripheral:
             ペリフェラルからの受信データが渡される
         """
 
-        if event == _IRQ_CENTRAL_CONNECT:
-            conn_handle, _, _ = data
-            print("New connection", conn_handle)
-            self._connections.add(conn_handle)
+        try:
+            if event == _IRQ_CENTRAL_CONNECT:
+                conn_handle, _, _ = data
+                print("New connection", conn_handle)
+                self._connections.add(conn_handle)
 
-        elif event == _IRQ_CENTRAL_DISCONNECT:
-            conn_handle, _, _ = data
-            print("Disconnected", conn_handle)
-            self._connections.remove(conn_handle)
-            self._advertise()  # 再度アドバタイジングを開始
+            elif event == _IRQ_CENTRAL_DISCONNECT:
+                conn_handle, _, _ = data
+                print("Disconnected", conn_handle)
+                self._connections.remove(conn_handle)
+                self._advertise()  # 再度アドバタイジングを開始
 
-        elif event == _IRQ_GATTS_WRITE:
-            # データ受信時の処理
-            # conn_handle: 接続しているデバイスの識別子
-            # value_handle: 書き込まれたキャラクタリスティックのハンドル
-            conn_handle, value_handle = data
+            elif event == _IRQ_GATTS_WRITE:
+                # データ受信時の処理
+                # conn_handle: 接続しているデバイスの識別子
+                # value_handle: 書き込まれたキャラクタリスティックのハンドル
+                conn_handle, value_handle = data
 
-            # # 書き込まれたデータを読み取る
-            # value = self._ble.gatts_read(value_handle)
+                # 書き込まれたデータを読み取る
+                value = self._ble.gatts_read(value_handle).decode()
 
-            # 受信データがSERVOキャラクタリスティックの場合
-            if value_handle == self._handle_servo:
-                # servo.main()を呼び出す
-                print("Start servo")
-                servo_module.main()
+                # 受信データがSERVOキャラクタリスティック
+                # かつ、受信データが26以上123以下の場合
+                if (
+                    value_handle == self._handle_servo
+                    and 26 < int(value)
+                    and int(value) < 123
+                ):
+                    # servo.main()を呼び出す
+                    print("Start servo")
+                    servo_module.main(int(value))
 
-            # 受信データがDeepsleepキャラクタリスティックの場合
-            elif value_handle == self._handle_deepsleep:
-                # deepsleepを実行
-                print("Start deepsleep")
-                deepsleep_module.main()
+                # 受信データがDeepsleepキャラクタリスティックの場合
+                elif value_handle == self._handle_deepsleep:
+                    # deepsleepを実行
+                    print("Start deepsleep")
+                    deepsleep_module.main()
 
-            # 受信データがLEDキャラクタリスティックの場合
-            elif value_handle == self._handle_led:
-                # Lチカを実行
-                print("Start LED")
-                self._led_active = True
-                self._blink_count = 0
+                # 受信データがLEDキャラクタリスティックの場合
+                elif value_handle == self._handle_led:
+                    # Lチカを実行
+                    print("Start LED")
+                    self._led_active = True
+                    self._blink_count = 0
+
+        except Exception as e:
+            print(e)
 
     def process(self):
         """
