@@ -18,7 +18,7 @@ class Servo:
         time.sleep(1)
         self.servo.duty(0)
 
-    def set_angle(self, duty) -> None:
+    def set_angle(self, duty=120) -> None:
         """
         角度を設定し、サーボモータを動作させる。
         動作後は初期角度に戻す。
@@ -50,13 +50,13 @@ class Servo:
         self.servo.deinit()
 
 
-def main():
+def main(duty=120):
     # GPIO15番ピンにサーボモータを接続
     servo = Servo(26)
 
     # サーボモータ始動
     print("start servo")
-    servo.set_angle(115)
+    servo.set_angle(duty)
     servo.set_default_angle()
 
     # サーボモータ停止
